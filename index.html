@@ -1,0 +1,109 @@
+<html>
+	<head>
+		<meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" />
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" type="text/css" href="animate.css">
+        <link rel="stylesheet" type="text/css" href="spinner.css">
+        <link rel="apple-touch-icon" href="assets/favicon.png">
+        <title>Essilor</title>
+	</head>
+
+	<body>
+		<div id="app">
+            <div class="home" v-bind:class="{clicked:reminded,out:onProfile}">
+                <img src="assets/home-1.png" class="before" @click="toggleReminder"/>
+                <img src="assets/home-2.png" class="after" @click="gotoProfile"/>
+            </div>
+            <div class="profile" v-bind:class="{in:onProfile,filled:uploaded}">
+                <img src="assets/profile-1.png" class="before" @click="triggerUpload"/>
+                <img src="assets/profile-2.png" class="after"/>
+                <div class="spinner-wrapper" v-bind:class="{hide:!showLoader}">
+                    <div class="lds-spinner" style="width:100%;height:100%"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                </div>
+                <div class="wizard">
+                    <div class="confirm" v-bind:class="{in:showConfirm}">
+                        <img src="assets/confirm.png" class="confirm-content" @click="nextConfirm" v-bind:class="{show:state==1}"/>
+                        <img src="assets/calculate.png" class="calculate" v-bind:class="{show:state==2}"/>
+                        <img src="assets/calculating.png" class="calculating" v-bind:class="{show:state==2}"/>
+                        <img src="assets/excellent.png" class="excellent" @click="nextConfirm" v-bind:class="{show:state==3}"/>
+                        <img src="assets/confirmed.png" class="confirmed" v-bind:class="{show:state==4}"/>
+                    </div>
+                    <div class="lens" v-bind:class="{in:showLens,out:showConfirm}">
+                        <div class="dropdown-list" @click="selectLens" v-bind:class="{show:showDropDown}">
+                            <div class="dropdown-item">Varilux S Series</div>
+                            <div class="dropdown-item">Varilux E Series</div>
+                            <div class="dropdown-item">Varilux Digitime</div>
+                            <div class="dropdown-item">Varilux Physio 3.0</div>
+                            <div class="dropdown-item">Varilux Comfort 3.0</div>
+                            <div class="dropdown-item">Varilux X Series (Recommended)</div>
+                        </div>
+                        <img src="assets/dropdown-selected.png" class="dropdown" @click="openDropdown" v-bind:class="{selected:lensSelected}"/>
+                        <div class="dropdown-submit" @click="gotoConfirm"></div>
+                    </div>
+                    <div class="glasses" v-bind:class="{out:showLens,selected:glassesSelected}">
+                        <img src="assets/glasses-selected.png" class="glasses-selected" v-bind:class="{hide:!glassesSelected}" @click="gotoLens"/>
+                        <input type="text" class="glasses-input" placeholder="Rechercher par nom de monture" v-model="glassesName" @keyup="handleKeyup"/>
+                        <div class="glasses-result" v-bind:class="{hide:!showGlassesResults}">
+                            <img src="assets/glasses.png"/>
+                        </div>
+                        <img src="assets/glasses-field.png" class="glasses-field" v-bind:class="{hide:!glassesSelected}"/>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="header" v-on:click="reset" v-bind:class="{expand:onProfile}">
+                    <div class="header-left">
+                        
+                    </div>
+                    <div class="header-right">
+                    </div>
+                </div>
+            <div class="nav" v-bind:class="{after:onProfile}" v-on:click="gotoProfile">
+                <div class="icons">
+
+                </div>
+                <div class="labels">
+
+                </div>
+                <div class="badge badge1">
+                    2
+                </div>
+                <div class="badge badge2">
+                    6
+                </div>
+                
+            </div>
+            <div class="reminder" v-bind:class="{show:showReminder}" @click="toggleReminder"></div>
+            <input type="file" v-on:change="handlePhotoChange" class="hidden-field" ref="field"/>
+            <div class="completed-app" v-bind:class="{show:showCompletedApp}">
+                <div class="modal-click" @click="toggleBigModal">
+
+                </div>
+                <div class="carousel">
+                    <img src="assets/cards/01.png" class="c1" @click="nextCard" v-bind:class="{in:currentCard==1,out:currentCard>1}"/>
+                    <img src="assets/cards/02.png" class="c2" @click="nextCard" v-bind:class="{in:currentCard==2,out:currentCard>2}"/>
+                    <img src="assets/cards/03.png" class="c3" @click="nextCard" v-bind:class="{in:currentCard==3,out:currentCard>3}"/>
+                    <img src="assets/cards/04.png" class="c4" @click="nextCard" v-bind:class="{in:currentCard==4}"/>
+                </div>
+                <div class="big-modal" v-bind:class="{show:showBigModal}" @click="toggleBigModal">
+                    <div class="big-modal-content" ref="modal" id="bigmodal">
+                        <div class="modal-content">
+                            <img src="assets/modal-content.png" class="content-image"/>
+                            <img src="assets/femme.gif" class="gif"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="completed-click" @click="gotoCompletedApp">
+
+            </div>
+        </div>
+        <script src="scripts.js" type="module"></script>
+        
+    </body>
+
+</html>
